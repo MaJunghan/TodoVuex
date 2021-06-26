@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex from 'vuex';
+import * as getters from './geters';
+import * as mutations from './mutations';
 
 Vue.use(Vuex);
 // use는 vue의 플러그인 
@@ -18,36 +20,11 @@ const storage = {
       return arr;
     },
 };
-
-
 export const store = new Vuex.Store({
     // data
     state: {
       todoItems: storage.fetch()
     },
-    getters: {
-      getTodoItem(state) {
-        return state.todoItems;
-      }
-    },
-    mutations: {
-      addOneItem(state,newTodoItem) {
-        const obj = {completed: false, item: newTodoItem};
-        localStorage.setItem(newTodoItem, JSON.stringify(obj));
-        state.todoItems.push(obj);
-      },
-      removeOneItem(state, payload) {
-        state.todoItems.splice(payload.index, 1);
-        localStorage.removeItem(payload.todoItem.item);
-      },
-      toggleOneItem(state, payload) {
-        payload.todoItem.completed = !payload.todoItem.completed;
-        localStorage.removeItem(payload.todoItem.item);
-        localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
-      },
-      clearAllItems(state) {
-        state.todoItems = [];
-        localStorage.clear();
-      }
-    }
+    getters: getters,
+    mutations: mutations
 });
